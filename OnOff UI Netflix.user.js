@@ -2,7 +2,7 @@
 // ==UserScript==
 // @name         On Off UI Netflix
 // @namespace    http://tampermonkey.net/
-// @version      1.2
+// @version      1.3
 // @description  ###
 // @author       UserRoot-Luca
 // @match        https://www.netflix.com/*
@@ -37,6 +37,12 @@
                     if (MyElement != null) {
                         if (!switchUI) {
                             MyElement.style.display = "none";
+                            let Time = document.querySelector("[data-uia=\"controls-time-remaining\"]");
+                            if (Time != null) {
+                                Time.addEventListener("DOMSubtreeModified", (e) => {
+                                    console.log(e.target.textContent);
+                                });
+                            }
                         }
                         else {
                             MyElement.style.display = "";
