@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         On Off UI Netflix
 // @namespace    http://tampermonkey.net/
-// @version      1.3
+// @version      1.4
 // @description  ###
 // @author       UserRoot-Luca
 // @match        https://www.netflix.com/*
@@ -41,6 +41,7 @@
                     if (MyElement != null) {
                         if (!switchUI) {
                             MyElement.style.display = "none";
+                            if (!(MyElement.style.display == "none")) { console.log("UI Error"); }
                             let Time = document.querySelector<HTMLSpanElement>("[data-uia=\"controls-time-remaining\"]")
                             if (Time != null) {
                                 Time.addEventListener("DOMSubtreeModified", (e: any) => {
