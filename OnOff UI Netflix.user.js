@@ -2,7 +2,7 @@
 // ==UserScript==
 // @name         On Off UI Netflix
 // @namespace    http://tampermonkey.net/
-// @version      1.4
+// @version      1.5
 // @description  ###
 // @author       UserRoot-Luca
 // @match        https://www.netflix.com/*
@@ -45,6 +45,10 @@
                                 Time.addEventListener("DOMSubtreeModified", (e) => {
                                     console.log(e.target.textContent);
                                 });
+                            }
+                            let credits = document.querySelector('[data-uia="watch-credits-seamless-button"]');
+                            if (credits != null) {
+                                credits.click();
                             }
                         }
                         else {
