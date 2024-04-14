@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         On Off UI Netflix
 // @namespace    http://tampermonkey.net/
-// @version      1.5
+// @version      2.0
 // @description  ###
 // @author       UserRoot-Luca
 // @match        https://www.netflix.com/*
@@ -12,10 +12,13 @@
 
 (function () {
     window.onload = () => {
-        const KEY = "u";
+        const KEY_UI = "u";
+        const KEY_TIME = "t";
         let switchUI = true;
+        let switchTIME = true;
+        let old_text = "";
         window.addEventListener('keydown', (e) => {
-            if (e.key == KEY) {
+            if (e.key == KEY_UI) {
                 if (switchUI) {
                     console.log("UI OFF");
                     switchUI = false;
@@ -24,7 +27,29 @@
                     switchUI = true;
                 }
             }
+            if (e.key == KEY_TIME) {
+                if (switchTIME) {
+                    console.log("TIME OFF");
+                    switchTIME = false;
+                } else {
+                    console.log("TIME On");
+                    switchTIME = true;
+                }
+            }
         }, false);
+        const TimeMultiplier = (seconds:number, speed:number):number => {
+            if(speed >= 1) {
+                return seconds / speed;
+            }
+            return seconds
+        }
+        const TimeFormats = (seconds:number, speed:number):string => {
+            let s:number = TimeMultiplier(seconds, speed);
+            let m:number = Math.floor((s % 3600) / 60);
+            let h:number = Math.floor(s / 3600);
+    
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
+        };
         let E_player = document.querySelector<HTMLDivElement>("[data-uia=\"player\"]");
         let GetPlayerInterval = setInterval(() => {
             if (E_player == null) {
@@ -42,18 +67,25 @@
                         if (!switchUI) {
                             MyElement.style.display = "none";
                             if (!(MyElement.style.display == "none")) { console.log("UI Error"); }
-                            let Time = document.querySelector<HTMLSpanElement>("[data-uia=\"controls-time-remaining\"]")
-                            if (Time != null) {
-                                Time.addEventListener("DOMSubtreeModified", (e: any) => {
-                                    console.log(e.target.textContent);
-                                })
-                            }
-                            let credits = document.querySelector<HTMLButtonElement>('[data-uia="watch-credits-seamless-button"]')
-                            if(credits != null){
-                                credits.click();
-                            }
                         } else {
                             MyElement.style.display = "";
+                        }
+                    }
+
+                    if (switchTIME) {
+                        let video = document.querySelector("video");
+                        if (video != null) {
+                            let playbackSpeed = video.playbackRate;
+                            let duration = video.duration;
+                            let currentSeconds = video.currentTime;
+                            let remainingTime = duration - currentSeconds;
+                            let endOra = new Date(new Date().getTime() + (TimeMultiplier(remainingTime, playbackSpeed) * 1000));
+                            let new_text:string = `${TimeFormats(duration, 1)} ( -${TimeFormats(remainingTime, playbackSpeed)} / ${endOra.getHours().toString().padStart(2, '0')}:${endOra.getMinutes().toString().padStart(2, '0')} )`
+                            if (new_text != old_text) {
+                                console.clear();
+                                console.log(new_text);
+                                old_text = new_text
+                            }
                         }
                     }
                 })
