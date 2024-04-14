@@ -2,7 +2,7 @@
 // ==UserScript==
 // @name         On Off UI Netflix
 // @namespace    http://tampermonkey.net/
-// @version      2.1
+// @version      2.2
 // @description  ###
 // @author       UserRoot-Luca
 // @match        https://www.netflix.com/*
@@ -15,7 +15,7 @@
         const KEY_UI = "u";
         const KEY_TIME = "t";
         let switchUI = true;
-        let switchTIME = true;
+        let switchTIME = false;
         let old_text = "";
         window.addEventListener('keydown', (e) => {
             if (e.key == KEY_UI) {
