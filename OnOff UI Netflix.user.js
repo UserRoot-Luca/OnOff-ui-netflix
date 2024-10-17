@@ -2,7 +2,7 @@
 // ==UserScript==
 // @name         On Off UI Netflix
 // @namespace    http://tampermonkey.net/
-// @version      2.3
+// @version      2.4
 // @description  ###
 // @author       UserRoot-Luca
 // @match        https://www.netflix.com/*
@@ -58,7 +58,7 @@
             }
             else {
                 E_player.addEventListener("DOMSubtreeModified", () => {
-                    const MyElement = document.evaluate("//*[@id=\"appMountPoint\"]/div/div/div[1]/div/div/div[2]/div[2]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                    const MyElement = document.evaluate("//*[@id=\"appMountPoint\"]/div/div/div[1]/div/div/div/div[2]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
                     if (MyElement != null) {
                         if (!switchUI) {
                             MyElement.style.display = "none";
