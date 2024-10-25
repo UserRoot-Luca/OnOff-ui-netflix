@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         On Off UI Netflix
 // @namespace    http://tampermonkey.net/
-// @version      2.4
+// @version      3.0
 // @description  ###
 // @author       UserRoot-Luca
 // @match        https://www.netflix.com/*
@@ -38,10 +38,7 @@
             }
         }, false);
         const TimeMultiplier = (seconds:number, speed:number):number => {
-            if(speed >= 1) {
-                return seconds / speed;
-            }
-            return seconds
+            return seconds / speed;
         }
         const TimeFormats = (seconds:number, speed:number):string => {
             let s:number = TimeMultiplier(seconds, speed);
