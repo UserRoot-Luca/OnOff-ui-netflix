@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         On Off UI Netflix
 // @namespace    http://tampermonkey.net/
-// @version      3.0
+// @version      4.0
 // @description  ###
 // @author       UserRoot-Luca
 // @match        https://www.netflix.com/*
@@ -52,7 +52,7 @@
             if (E_player == null) {
                 E_player = document.querySelector<HTMLDivElement>("[data-uia=\"player\"]");
             } else {
-                E_player.addEventListener("DOMSubtreeModified", () => {
+                new MutationObserver(() => {
                     const MyElement:any = document.evaluate(
                         "//*[@id=\"appMountPoint\"]/div/div/div[1]/div/div/div/div[2]",
                         document,
@@ -84,7 +84,10 @@
                             }
                         }
                     }
-                })
+                }).observe(E_player, {
+                    childList: true,
+                    subtree: true,
+                });
                 clearInterval(GetPlayerInterval);
             }
         }, 300)
